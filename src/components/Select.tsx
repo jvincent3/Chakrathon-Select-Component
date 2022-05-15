@@ -1,10 +1,5 @@
-import { ReactNode } from "react"
-import { chakra } from "@chakra-ui/react"
+import { chakra, HTMLChakraProps } from "@chakra-ui/react"
 
-interface Props {
-  children: ReactNode
-}
-
-export default function Select({ children }: Props) {
+export default function Select({ children }: HTMLChakraProps<"div">) {
   return <chakra.div>{children}</chakra.div>
 }
