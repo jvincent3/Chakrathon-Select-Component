@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { chakra } from "@chakra-ui/system"
+import { chakra } from "@chakra-ui/react"
 
 interface Props {
   children: ReactNode
