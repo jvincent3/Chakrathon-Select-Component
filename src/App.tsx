@@ -1,49 +1,67 @@
 import { useState } from "react"
-import logo from "./logo.svg"
 import "./App.css"
-import { Button } from "@chakra-ui/react"
+import {
+  Box,
+  Button,
+  Center,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/react"
+import { Select, SelectList, SelectItem } from "./components/select"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [fruits, setFruits] = useState([
+    { label: "Apple", value: "apple" },
+    { label: "Banana", value: "banana" },
+    { label: "Orange", value: "orange" },
+  ])
+  const [selectedFruit, setSelectedFruit] = useState(fruits[0])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <Button
-            colorScheme="green"
-            type="button"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            count is: {count}
-          </Button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <Center h="100vh">
+      <Box>
+        <Box>{JSON.stringify(selectedFruit)}</Box>
+        <Select
+          labelKey="label"
+          isSearchable={true}
+          isClearable={true}
+          value={selectedFruit}
+          onChange={(value) => {
+            setSelectedFruit(value)
+          }}
+          onSearch={(value) => {
+            setFruits((prevFruits) =>
+              prevFruits.filter((fruit) => fruit.value !== value)
+            )
+          }}
+          onClear={() => setSelectedFruit(fruits[0])}
+        >
+          <SelectList>
+            {fruits.map((fruit) => (
+              <SelectItem
+                isActive={selectedFruit.value === fruit.value}
+                value={fruit}
+              >
+                {fruit.label}
+              </SelectItem>
+            ))}
+          </SelectList>
+        </Select>
+
+        {/* <Menu>
+          <MenuButton as={Button} colorScheme="pink">
+            Test
+          </MenuButton>
+          <MenuList>
+            {fruits.map((fruit) => (
+              <MenuItem value={fruit}>{fruit.label}</MenuItem>
+            ))}
+          </MenuList>
+        </Menu> */}
+      </Box>
+    </Center>
   )
 }
 
