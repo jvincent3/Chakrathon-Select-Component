@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
 } from "react"
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from "@chakra-ui/icons"
 import {
   MenuProps,
   Menu,
@@ -28,13 +29,12 @@ type SelectProps = Pick<MenuProps, "onClose" | "children"> & {
   getLabel: (item: any) => string
 }
 
-const SelectContext =
-  createContext<
-    | null
-    | (Omit<SelectProps, "onClose" | "children" | "getLabel"> & {
-        displayValue: string
-      })
-  >(null)
+const SelectContext = createContext<
+  | null
+  | (Omit<SelectProps, "onClose" | "children" | "getLabel"> & {
+      displayValue: string
+    })
+>(null)
 
 type SelectListProps = Pick<MenuListProps, "children"> & {}
 
@@ -63,10 +63,19 @@ export function SelectItem({ children, value, isActive }: SelectItemProps) {
 }
 
 export const SelectInput = forwardRef(
-  ({ children, ...rest }: SelectInputProps, ref) => {
+  (
+    { children, w = "56", cursor = "pointer", ...rest }: SelectInputProps,
+    ref
+  ) => {
     return (
       <Flex align="center" justify="space-between" ref={ref}>
-        <Button as={Box} {...rest} rightIcon={<ChevronIcon />}>
+        <Button
+          w={w}
+          cursor={cursor}
+          as={Box}
+          {...rest}
+          rightIcon={<ChevronDownIcon />}
+        >
           {children}
         </Button>
       </Flex>
