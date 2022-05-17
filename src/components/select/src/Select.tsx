@@ -4,7 +4,9 @@ import SelectButton, {
   SelectButtonProps,
 } from "../../select-button/src/SelectButton"
 import { SelectListProps } from "../../select-list"
-import SelectListItem from "../../select-list-item/src/SelectListItem"
+import SelectListItem, {
+  SelectListItemProps,
+} from "../../select-list-item/src/SelectListItem"
 import SelectList from "../../select-list/src/SelectList"
 
 export interface SelectProps {
@@ -14,7 +16,7 @@ export interface SelectProps {
   menuProps?: MenuProps
   selectButtonProps?: SelectButtonProps
   selectListProps?: SelectListProps
-  selectListItemProps?: SelectListProps
+  selectListItemProps?: SelectListItemProps
 }
 
 const Select = forwardRef(
@@ -26,6 +28,7 @@ const Select = forwardRef(
       menuProps,
       selectButtonProps,
       selectListProps,
+      selectListItemProps,
     }: SelectProps,
     ref
   ) => {
@@ -38,7 +41,9 @@ const Select = forwardRef(
             <SelectButton {...selectButtonProps}>{label}</SelectButton>
             <SelectList {...selectListProps}>
               {options.map((label, i) => (
-                <SelectListItem key={`option-${i}`}>{label}</SelectListItem>
+                <SelectListItem key={`option-${i}`} {...selectListItemProps}>
+                  {label}
+                </SelectListItem>
               ))}
             </SelectList>
           </>
