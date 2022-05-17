@@ -62,7 +62,9 @@ const Select = forwardRef(
                 width={getWidth()}
                 {...selectButtonProps}
               >
-                {selectedValue ? getButtonLabel(selectedValue) : placeholder}
+                <Box w="full" overflow="hidden">
+                  {selectedValue ? getButtonLabel(selectedValue) : placeholder}
+                </Box>
               </SelectButton>
               <SelectList
                 w={getWidth()}
