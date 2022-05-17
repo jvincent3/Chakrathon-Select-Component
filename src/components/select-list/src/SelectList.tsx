@@ -1,5 +1,16 @@
-import { chakra, HTMLChakraProps } from "@chakra-ui/react"
+import { MenuList, MenuListProps } from "@chakra-ui/react"
+import { forwardRef } from "react"
 
-export default function Select({ children }: HTMLChakraProps<"ul">) {
-  return <chakra.ul>{children}</chakra.ul>
+export interface SelectListProps extends MenuListProps {
+  //
 }
+
+const SelectList = forwardRef(({ children, ...rest }: SelectListProps, ref) => {
+  return (
+    <MenuList w="56" {...rest}>
+      {children}
+    </MenuList>
+  )
+})
+
+export default SelectList
