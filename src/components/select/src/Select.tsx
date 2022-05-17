@@ -1,5 +1,5 @@
-import { Menu, MenuProps } from "@chakra-ui/react"
-import { forwardRef, ReactNode } from "react"
+import { Box, BoxProps, Menu, MenuProps } from "@chakra-ui/react"
+import { forwardRef, ReactNode, useState } from "react"
 import SelectButton, {
   SelectButtonProps,
 } from "../../select-button/src/SelectButton"
@@ -9,10 +9,12 @@ import SelectListItem, {
 } from "../../select-list-item/src/SelectListItem"
 import SelectList from "../../select-list/src/SelectList"
 
-export interface SelectProps {
+export interface SelectProps extends BoxProps {
   children?: ReactNode
-  label?: string | ReactNode
+  placeholder?: string
+  value?: any
   options?: Array<any>
+  getOptionLabel?: (option: any) => string
   menuProps?: MenuProps
   selectButtonProps?: SelectButtonProps
   selectListProps?: SelectListProps
@@ -23,32 +25,64 @@ const Select = forwardRef(
   (
     {
       children = undefined,
-      label = "Select a Value",
+      placeholder = "Select a Value",
+      value,
       options = [],
+      getOptionLabel,
       menuProps,
       selectButtonProps,
       selectListProps,
       selectListItemProps,
+      ...rest
     }: SelectProps,
     ref
   ) => {
+    const [selectedValue, setSelectedValue] = useState<any>(value)
+
+    const getButtonLabel = (val: any): string => {
+      if (getOptionLabel) return getOptionLabel(val)
+      else return val
+    }
+
+    const getWidth = () => {
+      if (rest.width) return rest.width
+      if (rest.w) return rest.w
+      return "56"
+    }
+
     return (
-      <Menu {...menuProps}>
-        {!!children ? (
-          <>{children}</>
-        ) : (
-          <>
-            <SelectButton {...selectButtonProps}>{label}</SelectButton>
-            <SelectList {...selectListProps}>
-              {options.map((label, i) => (
-                <SelectListItem key={`option-${i}`} {...selectListItemProps}>
-                  {label}
-                </SelectListItem>
-              ))}
-            </SelectList>
-          </>
-        )}
-      </Menu>
+      <Box w={getWidth()} width={getWidth()} {...rest}>
+        <Menu {...menuProps}>
+          {!!children ? (
+            <>{children}</>
+          ) : (
+            <>
+              <SelectButton
+                w={getWidth()}
+                width={getWidth()}
+                {...selectButtonProps}
+              >
+                {selectedValue ? getButtonLabel(selectedValue) : placeholder}
+              </SelectButton>
+              <SelectList
+                w={getWidth()}
+                width={getWidth()}
+                {...selectListProps}
+              >
+                {options.map((opt, i) => (
+                  <SelectListItem
+                    onClick={() => setSelectedValue(opt)}
+                    key={`option-${i}`}
+                    {...selectListItemProps}
+                  >
+                    {!!getOptionLabel ? getOptionLabel(opt) : opt}
+                  </SelectListItem>
+                ))}
+              </SelectList>
+            </>
+          )}
+        </Menu>
+      </Box>
     )
   }
 )
