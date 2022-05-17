@@ -9,7 +9,14 @@ export interface SelectButtonProps extends MenuButtonProps {
 const SelectButton = forwardRef(
   ({ children, ...rest }: SelectButtonProps, ref) => {
     return (
-      <MenuButton as={Button} w="56" rightIcon={<ChevronDownIcon />} {...rest}>
+      <MenuButton
+        as={Button}
+        w="56"
+        rightIcon={<ChevronDownIcon />}
+        textAlign="left"
+        overflow="hidden"
+        {...rest}
+      >
         {children}
       </MenuButton>
     )
