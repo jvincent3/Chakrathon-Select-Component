@@ -19,6 +19,9 @@ import {
   Box,
   forwardRef,
   Flex,
+  HTMLChakraProps,
+  ComponentWithAs,
+  chakra,
 } from "@chakra-ui/react"
 import { ChevronIcon } from "../../icons"
 
@@ -33,12 +36,13 @@ const SelectContext =
     | null
     | (Omit<SelectProps, "onClose" | "children" | "getLabel"> & {
         displayValue: string
+        isOpen: boolean
       })
   >(null)
 
-type SelectListProps = Pick<MenuListProps, "children"> & {}
+type SelectListProps = HTMLChakraProps<"ul"> & {}
 
-type SelectItemProps = Pick<MenuItemProps, "children"> & {
+type SelectItemProps = Omit<HTMLChakraProps<"li">, "value"> & {
   isActive: boolean
   value: any
 }
@@ -49,24 +53,40 @@ export function SelectList({ children }: SelectListProps) {
   return <MenuList>{children}</MenuList>
 }
 
-export function SelectItem({ children, value, isActive }: SelectItemProps) {
+export function SelectItem({
+  children,
+  value,
+  isActive,
+  ...rest
+}: SelectItemProps) {
   const context = useContext(SelectContext)
 
   return (
-    <MenuItem
+    <chakra.li
+      as={MenuItem}
       bg={isActive ? "gray.200" : "transparent"}
       onClick={() => context?.onChange?.(value)}
+      {...rest}
     >
       {children}
-    </MenuItem>
+    </chakra.li>
   )
 }
 
 export const SelectInput = forwardRef(
   ({ children, ...rest }: SelectInputProps, ref) => {
+    const context = useContext(SelectContext)
     return (
       <Flex align="center" justify="space-between" ref={ref}>
-        <Button as={Box} {...rest} rightIcon={<ChevronIcon />}>
+        <Button
+          as={Box}
+          {...rest}
+          rightIcon={
+            <ChevronIcon
+              transform={context?.isOpen ? "rotate(180deg)" : undefined}
+            />
+          }
+        >
           {children}
         </Button>
       </Flex>
@@ -79,6 +99,7 @@ export function Select({
   value,
   children,
   getLabel,
+  onClose,
   ...rest
 }: SelectProps) {
   const childrenArray = Children.toArray(children as ReactNode)
@@ -90,24 +111,29 @@ export function Select({
     return getLabel(value)
   }, [value])
 
+  console.log({ hasSelectInput })
+
   return (
-    <SelectContext.Provider
-      value={{
-        value,
-        displayValue,
-        onChange,
+    <Menu onClose={onClose} autoSelect={false}>
+      {({ isOpen }) => {
+        return (
+          <SelectContext.Provider
+            value={{
+              value,
+              displayValue,
+              onChange,
+              isOpen,
+            }}
+          >
+            {children}
+            {!hasSelectInput && (
+              <MenuButton as={SelectInput} {...rest}>
+                {displayValue}
+              </MenuButton>
+            )}
+          </SelectContext.Provider>
+        )
       }}
-    >
-      <Menu autoSelect={false}>
-        <>
-          {children}
-          {!hasSelectInput && (
-            <MenuButton as={SelectInput} {...rest}>
-              {displayValue}
-            </MenuButton>
-          )}
-        </>
-      </Menu>
-    </SelectContext.Provider>
+    </Menu>
   )
 }

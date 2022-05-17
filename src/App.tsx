@@ -1,20 +1,7 @@
 import { useState } from "react"
 import "./App.css"
-import {
-  Box,
-  Button,
-  Center,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react"
-import {
-  Select,
-  SelectList,
-  SelectItem,
-  SelectInput,
-} from "./components/select"
+import { Box, Center } from "@chakra-ui/react"
+import { Select, SelectList, SelectItem } from "./components/select"
 
 function App() {
   const [fruits, setFruits] = useState([
@@ -31,9 +18,7 @@ function App() {
         <Select
           getLabel={(item) => item.label}
           value={selectedFruit}
-          onChange={(value) => {
-            setSelectedFruit(value)
-          }}
+          onChange={(value) => setSelectedFruit(value)}
         >
           <SelectList>
             {fruits.map((fruit) => (
@@ -47,17 +32,6 @@ function App() {
             ))}
           </SelectList>
         </Select>
-
-        {/* <Menu>
-          <MenuButton as={Button} colorScheme="pink">
-            Test
-          </MenuButton>
-          <MenuList>
-            {fruits.map((fruit) => (
-              <MenuItem value={fruit}>{fruit.label}</MenuItem>
-            ))}
-          </MenuList>
-        </Menu> */}
       </Box>
     </Center>
   )

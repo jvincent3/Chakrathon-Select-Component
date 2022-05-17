@@ -23,13 +23,14 @@ export function ClearIcon(props: IconProps) {
 
 export function ChevronIcon(props: IconProps) {
   return (
-    <Icon width="20px" h="20px" viewBox="0 0 16 17" {...props}>
+    <Icon width="20px" h="20px" viewBox="0 0 10 7" {...props}>
       <path
-        d="M12 10.5L8 6.5L4 10.5"
+        fill="none"
         stroke="#737373"
-        strokeWidth="1.33333"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M1 1.5L5 5.5L9 1.5"
+        stroke-width="1.33333"
+        stroke-linecap="round"
+        stroke-linejoin="round"
       />
     </Icon>
   )
