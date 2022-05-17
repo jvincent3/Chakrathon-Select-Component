@@ -6,16 +6,16 @@ export function ClearIcon(props: IconProps) {
       <path
         d="M12 4.5L4 12.5"
         stroke="#737373"
-        stroke-width="1.33333"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M4 4.5L12 12.5"
         stroke="#737373"
-        stroke-width="1.33333"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Icon>
   )
@@ -27,9 +27,9 @@ export function ChevronIcon(props: IconProps) {
       <path
         d="M12 10.5L8 6.5L4 10.5"
         stroke="#737373"
-        stroke-width="1.33333"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Icon>
   )

@@ -9,7 +9,12 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react"
-import { Select, SelectList, SelectItem } from "./components/select"
+import {
+  Select,
+  SelectList,
+  SelectItem,
+  SelectInput,
+} from "./components/select"
 
 function App() {
   const [fruits, setFruits] = useState([
@@ -24,23 +29,16 @@ function App() {
       <Box>
         <Box>{JSON.stringify(selectedFruit)}</Box>
         <Select
-          labelKey="label"
-          isSearchable={true}
-          isClearable={true}
+          getLabel={(item) => item.label}
           value={selectedFruit}
           onChange={(value) => {
             setSelectedFruit(value)
           }}
-          onSearch={(value) => {
-            setFruits((prevFruits) =>
-              prevFruits.filter((fruit) => fruit.value !== value)
-            )
-          }}
-          onClear={() => setSelectedFruit(fruits[0])}
         >
           <SelectList>
             {fruits.map((fruit) => (
               <SelectItem
+                key={fruit.value}
                 isActive={selectedFruit.value === fruit.value}
                 value={fruit}
               >

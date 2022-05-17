@@ -1,11 +1,17 @@
-import { Children, createContext, useContext, useMemo, useRef } from "react"
+import {
+  Children,
+  createContext,
+  ReactNode,
+  useContext,
+  useMemo,
+  useRef,
+} from "react"
 import {
   MenuProps,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  Input,
   Button,
   MenuListProps,
   MenuItemProps,
@@ -14,29 +20,21 @@ import {
   forwardRef,
   Flex,
 } from "@chakra-ui/react"
-import { ChevronIcon, ClearIcon } from "../../icons"
-
-function isObject(value: any) {
-  return Object.getPrototypeOf(value) === Object.prototype
-}
+import { ChevronIcon } from "../../icons"
 
 type SelectProps = Pick<MenuProps, "onClose" | "children"> & {
   onChange?: (item: any) => void
-  onClear?: () => void
-  onSearch?: (value: string) => void
   value: any
-  labelKey?: string | ((item: any) => any)
-  valueKey?: string | ((item: any) => any)
-  isClearable?: boolean
-  isSearchable?: boolean
+  getLabel: (item: any) => string
 }
 
-const SelectContext = createContext<
-  | null
-  | (SelectProps & {
-      displayValue: string
-    })
->(null)
+const SelectContext =
+  createContext<
+    | null
+    | (Omit<SelectProps, "onClose" | "children" | "getLabel"> & {
+        displayValue: string
+      })
+  >(null)
 
 type SelectListProps = Pick<MenuListProps, "children"> & {}
 
@@ -45,7 +43,7 @@ type SelectItemProps = Pick<MenuItemProps, "children"> & {
   value: any
 }
 
-type SelectInputProps = Pick<MenuButtonProps, "children"> & {}
+type SelectInputProps = MenuButtonProps & {}
 
 export function SelectList({ children }: SelectListProps) {
   return <MenuList>{children}</MenuList>
@@ -64,40 +62,13 @@ export function SelectItem({ children, value, isActive }: SelectItemProps) {
   )
 }
 
-const SelectInput = forwardRef(
+export const SelectInput = forwardRef(
   ({ children, ...rest }: SelectInputProps, ref) => {
-    const context = useContext(SelectContext)
-    const inputRef = useRef<HTMLInputElement>(null)
     return (
       <Flex align="center" justify="space-between" ref={ref}>
-        {context?.isSearchable ? (
-          <Input
-            ref={inputRef}
-            type="text"
-            value={context?.displayValue}
-            onChange={(e) => {
-              context?.onSearch?.(e.target.value)
-              if (inputRef.current) {
-                inputRef.current.value = e.target.value
-              }
-            }}
-            {...rest}
-          />
-        ) : (
-          <Button as={Box} ref={ref} {...rest} />
-        )}
-        <Flex align="center" gap="5px" pos="relative" left="-55px" zIndex={5}>
-          {context?.isClearable && (
-            <ClearIcon
-              onClick={(e) => {
-                e.stopPropagation()
-                context?.onClear?.()
-              }}
-              cursor="pointer"
-            />
-          )}
-          {context?.isSearchable && <ChevronIcon cursor="pointer" />}
-        </Flex>
+        <Button as={Box} {...rest} rightIcon={<ChevronIcon />}>
+          {children}
+        </Button>
       </Flex>
     )
   }
@@ -105,42 +76,37 @@ const SelectInput = forwardRef(
 
 export function Select({
   onChange,
-  onClear,
-  onSearch,
   value,
-  labelKey,
-  valueKey,
   children,
-  isClearable = false,
-  isSearchable = false,
+  getLabel,
+  ...rest
 }: SelectProps) {
-  const childrenArray = Children.toArray(children)
+  const childrenArray = Children.toArray(children as ReactNode)
   const hasSelectInput = useMemo(
     () => childrenArray.some((child) => child?.type === SelectInput),
     [childrenArray.length]
   )
-
-  const displayValue = isObject(value) ? value[labelKey] : value
+  const displayValue = useMemo(() => {
+    return getLabel(value)
+  }, [value])
 
   return (
     <SelectContext.Provider
       value={{
         value,
         displayValue,
-        isSearchable,
-        isClearable,
         onChange,
-        onClear,
-        onSearch,
       }}
     >
       <Menu autoSelect={false}>
-        {[
-          children,
-          !hasSelectInput && (
-            <MenuButton as={SelectInput}>{displayValue}</MenuButton>
-          ),
-        ]}
+        <>
+          {children}
+          {!hasSelectInput && (
+            <MenuButton as={SelectInput} {...rest}>
+              {displayValue}
+            </MenuButton>
+          )}
+        </>
       </Menu>
     </SelectContext.Provider>
   )
