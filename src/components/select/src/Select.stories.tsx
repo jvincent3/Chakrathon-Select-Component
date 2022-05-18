@@ -41,7 +41,6 @@ export const BasicUsage: StoryFn<StoryProps> = () => {
       </SelectList>
     </Select>
   )
-
 }
 
 
