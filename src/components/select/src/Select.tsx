@@ -1,4 +1,4 @@
-import { Box, BoxProps, Menu, MenuProps } from "@chakra-ui/react"
+import { Box, BoxProps, Menu, MenuProps, Text } from "@chakra-ui/react"
 import { forwardRef, ReactNode, useState } from "react"
 import SelectButton, {
   SelectButtonProps,
@@ -11,6 +11,7 @@ import SelectList from "../../select-list/src/SelectList"
 
 export interface SelectProps extends BoxProps {
   children?: ReactNode
+  isMultiple?: boolean
   placeholder?: string
   value?: any
   options?: Array<any>
@@ -25,6 +26,7 @@ const Select = forwardRef(
   (
     {
       children = undefined,
+      isMultiple = false,
       placeholder = "Select a Value",
       value,
       options = [],
@@ -37,7 +39,9 @@ const Select = forwardRef(
     }: SelectProps,
     ref
   ) => {
-    const [selectedValue, setSelectedValue] = useState<any>(value)
+    const [selectedValue, setSelectedValue] = useState<any>(
+      value ? [value] : []
+    )
 
     const getButtonLabel = (val: any): string => {
       if (getOptionLabel) return getOptionLabel(val)
@@ -50,6 +54,35 @@ const Select = forwardRef(
       return "56"
     }
 
+    const handleValues = (opt: any): void => {
+      if (!isMultiple) {
+        setSelectedValue([opt])
+        return
+      }
+
+      if (!selectedValue.includes(opt))
+        setSelectedValue([...selectedValue, opt])
+      else {
+        setSelectedValue([...selectedValue.filter((i: any) => i !== opt)])
+      }
+    }
+
+    const displayMultipleValues = (): string => {
+      if (!!selectedValue.length) {
+        return selectedValue
+          .reduce(
+            (arr: Array<any>, opt: any) => [...arr, getButtonLabel(opt)],
+            []
+          )
+          .join(", ")
+      } else return placeholder
+    }
+
+    const displaySingleValue = (): string => {
+      if (!!selectedValue.length) return getButtonLabel(selectedValue[0])
+      else return placeholder
+    }
+
     return (
       <Box w={getWidth()} width={getWidth()} {...rest}>
         <Menu {...menuProps}>
@@ -58,13 +91,22 @@ const Select = forwardRef(
           ) : (
             <>
               <SelectButton
+                h="max-content"
                 w={getWidth()}
+                py="2"
                 width={getWidth()}
                 {...selectButtonProps}
               >
-                <Box w="full" overflow="hidden">
-                  {selectedValue ? getButtonLabel(selectedValue) : placeholder}
-                </Box>
+                {!isMultiple && (
+                  <Box w="full" overflow="hidden">
+                    {displaySingleValue()}
+                  </Box>
+                )}
+                {isMultiple && (
+                  <Text w="full" overflow="hidden" whiteSpace="normal">
+                    {displayMultipleValues()}
+                  </Text>
+                )}
               </SelectButton>
               <SelectList
                 w={getWidth()}
@@ -73,7 +115,7 @@ const Select = forwardRef(
               >
                 {options.map((opt, i) => (
                   <SelectListItem
-                    onClick={() => setSelectedValue(opt)}
+                    onClick={() => handleValues(opt)}
                     key={`option-${i}`}
                     {...selectListItemProps}
                   >
