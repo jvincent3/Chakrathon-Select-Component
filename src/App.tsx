@@ -4,7 +4,7 @@ import Select from "./components/select/src/Select"
 function App() {
   return (
     <div className="App">
-      <Grid m="16" gap={4}>
+      <Grid m="16" gap={16}>
         <Box>
           <Text fontSize="xl" fontWeight="bold" mb="4">
             Simple Select
