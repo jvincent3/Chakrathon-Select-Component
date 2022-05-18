@@ -13,7 +13,9 @@ git clone https://github.com/jvincent3/Chakrathon-Select-Component.git
 cd Chakrathon-Select-Component
 ```
 
-3. Setup all the dependencies and packages by running `npm`.
+3. Setup all the dependencies and packages by running `npm i`.
+
+> if you're having trouble installing try installing it with ```--peer-dependenciesp```
 
 4. Execute `npm run dev` to spin up a local development server.
 
@@ -27,6 +29,7 @@ cd Chakrathon-Select-Component
 
 **`npm run build`**: builds the docsite for production.
 
+**`npm run storybook`**: starts the local storybook server.
 ## Updating the docs for new release
 
 When a new version of `Chakrathon-Select-Component` has been released, here's what you need
