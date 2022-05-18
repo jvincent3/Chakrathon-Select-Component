@@ -13,7 +13,9 @@ git clone https://github.com/jvincent3/Chakrathon-Select-Component.git
 cd Chakrathon-Select-Component
 ```
 
-3. Setup all the dependencies and packages by running `npm`.
+3. Setup all the dependencies and packages by running `npm i`.
+
+> if you're having trouble installing try installing it with ```--peer-dependenciesp```
 
 4. Execute `npm run dev` to spin up a local development server.
 
@@ -27,6 +29,7 @@ cd Chakrathon-Select-Component
 
 **`npm run build`**: builds the docsite for production.
 
+**`npm run storybook`**: starts the local storybook server.
 ## Updating the docs for new release
 
 When a new version of `Chakrathon-Select-Component` has been released, here's what you need
@@ -35,6 +38,32 @@ to do to get it reflected in the docs:
 - Bump the version of `Chakrathon-Select-Component`
 - Open a Pull Request titled `docs: updates for new release`
 
+# Select
+
+ A simple and easily styleable Select Input
+
+![alt text](./src/images/SelectComponent.png "Logo Title Text 1")
+
+## Components
+
+### Select
+
+- `onChange` - action which is set when the component is changed
+- `value` - control the current value
+- `getLabel` - add the active label which is set
+- `onClose` - action which is set when the component is closed
+- `onOpen` - action which is set when the component is open
+### SelectList
+
+### SelectItem
+- `isActive` - action which is set when the component is active
+- `value` - control the current value
+### SelectValue
+
+## Example
+![alt text](./src/images/example.png "Example image")
+
+# Contribute
 ### Commit Convention
 
 Before you create a Pull Request, please check whether your commits comply with

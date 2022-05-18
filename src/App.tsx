@@ -1,49 +1,44 @@
 import { useState } from "react"
-import logo from "./logo.svg"
 import "./App.css"
-import { Button } from "@chakra-ui/react"
+import { Box, Center } from "@chakra-ui/react"
+import {
+  Select,
+  SelectList,
+  SelectItem,
+  SelectValue,
+} from "./components/select"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const fruits = [
+    { label: "Apple", value: "apple" },
+    { label: "Banana", value: "banana" },
+    { label: "Orange", value: "orange" },
+  ])
+  const [selectedFruit, setSelectedFruit] = useState(fruits[0])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <Button
-            colorScheme="green"
-            type="button"
-            onClick={() => setCount((count) => count + 1)}
-          >
-            count is: {count}
-          </Button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <Center h="100vh">
+      <Box>
+        <Select
+          getLabel={(item) => item.label}
+          value={selectedFruit}
+          onChange={(value) => setSelectedFruit(value)}
+        >
+          <SelectValue />
+          <SelectList>
+            {fruits.map((fruit) => (
+              <SelectItem
+                key={fruit.value}
+                isActive={selectedFruit.value === fruit.value}
+                value={fruit}
+              >
+                {fruit.label}
+              </SelectItem>
+            ))}
+          </SelectList>
+        </Select>
+      </Box>
+    </Center>
   )
 }
 
