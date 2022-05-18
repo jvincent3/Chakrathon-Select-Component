@@ -1,11 +1,4 @@
-import {
-  Children,
-  createContext,
-  ReactNode,
-  useContext,
-  useMemo,
-  useRef,
-} from "react"
+import { createContext, ReactNode, useContext, useMemo } from "react"
 import {
   MenuProps,
   Menu,
@@ -13,32 +6,27 @@ import {
   MenuList,
   MenuItem,
   Button,
-  MenuListProps,
-  MenuItemProps,
   MenuButtonProps,
-  Box,
   forwardRef,
-  Flex,
   HTMLChakraProps,
-  ComponentWithAs,
   chakra,
 } from "@chakra-ui/react"
 import { ChevronIcon } from "../../icons"
 
-type SelectProps = Pick<MenuProps, "onClose" | "children"> & {
+type SelectProps = Pick<MenuProps, "onClose" | "onOpen" | "children"> & {
   onChange?: (item: any) => void
   value: any
+  children: ReactNode
   getLabel: (item: any) => string
 }
 
-const SelectContext =
-  createContext<
-    | null
-    | (Omit<SelectProps, "onClose" | "children" | "getLabel"> & {
-        displayValue: string
-        isOpen: boolean
-      })
-  >(null)
+const SelectContext = createContext<
+  | null
+  | (Omit<SelectProps, "onClose" | "children" | "getLabel"> & {
+      displayValue: string
+      isOpen: boolean
+    })
+>(null)
 
 type SelectListProps = HTMLChakraProps<"ul"> & {}
 
@@ -63,8 +51,10 @@ export function SelectItem({
 
   return (
     <chakra.li
+      w="56"
       as={MenuItem}
-      bg={isActive ? "gray.200" : "transparent"}
+      bg={isActive ? "#E5E5E5" : "transparent"}
+      _hover={{ bg: "#00000029" }}
       onClick={() => context?.onChange?.(value)}
       {...rest}
     >
@@ -73,23 +63,34 @@ export function SelectItem({
   )
 }
 
-export const SelectInput = forwardRef(
+export const SelectValue = forwardRef(
   ({ children, ...rest }: SelectInputProps, ref) => {
     const context = useContext(SelectContext)
     return (
-      <Flex align="center" justify="space-between" ref={ref}>
-        <Button
-          as={Box}
-          {...rest}
-          rightIcon={
-            <ChevronIcon
-              transform={context?.isOpen ? "rotate(180deg)" : undefined}
-            />
-          }
-        >
-          {children}
-        </Button>
-      </Flex>
+      <MenuButton
+        ref={ref}
+        as={Button}
+        color="#404040"
+        textAlign="left"
+        w="56"
+        d="flex"
+        align="center"
+        justify="space-between"
+        bg="white"
+        border="2px solid #E5E5E5"
+        _hover={{ bg: "white" }}
+        _active={{ bg: "white" }}
+        rightIcon={
+          <ChevronIcon
+            width="13px"
+            height="13px"
+            transform={context?.isOpen ? "rotate(180deg)" : undefined}
+          />
+        }
+        {...rest}
+      >
+        {context?.displayValue}
+      </MenuButton>
     )
   }
 )
@@ -100,21 +101,14 @@ export function Select({
   children,
   getLabel,
   onClose,
-  ...rest
+  onOpen,
 }: SelectProps) {
-  const childrenArray = Children.toArray(children as ReactNode)
-  const hasSelectInput = useMemo(
-    () => childrenArray.some((child) => child?.type === SelectInput),
-    [childrenArray.length]
-  )
   const displayValue = useMemo(() => {
     return getLabel(value)
   }, [value])
 
-  console.log({ hasSelectInput })
-
   return (
-    <Menu onClose={onClose} autoSelect={false}>
+    <Menu onClose={onClose} onOpen={onOpen} autoSelect={false}>
       {({ isOpen }) => {
         return (
           <SelectContext.Provider
@@ -126,11 +120,6 @@ export function Select({
             }}
           >
             {children}
-            {!hasSelectInput && (
-              <MenuButton as={SelectInput} {...rest}>
-                {displayValue}
-              </MenuButton>
-            )}
           </SelectContext.Provider>
         )
       }}

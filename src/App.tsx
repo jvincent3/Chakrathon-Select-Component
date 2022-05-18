@@ -1,7 +1,12 @@
 import { useState } from "react"
 import "./App.css"
 import { Box, Center } from "@chakra-ui/react"
-import { Select, SelectList, SelectItem } from "./components/select"
+import {
+  Select,
+  SelectList,
+  SelectItem,
+  SelectValue,
+} from "./components/select"
 
 function App() {
   const [fruits, setFruits] = useState([
@@ -14,12 +19,12 @@ function App() {
   return (
     <Center h="100vh">
       <Box>
-        <Box>{JSON.stringify(selectedFruit)}</Box>
         <Select
           getLabel={(item) => item.label}
           value={selectedFruit}
           onChange={(value) => setSelectedFruit(value)}
         >
+          <SelectValue />
           <SelectList>
             {fruits.map((fruit) => (
               <SelectItem

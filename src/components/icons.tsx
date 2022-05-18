@@ -28,9 +28,9 @@ export function ChevronIcon(props: IconProps) {
         fill="none"
         stroke="#737373"
         d="M1 1.5L5 5.5L9 1.5"
-        stroke-width="1.33333"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </Icon>
   )
