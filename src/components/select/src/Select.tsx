@@ -51,7 +51,7 @@ export function SelectItem({
 
   return (
     <chakra.li
-      w="56"
+      w={{ sm: "56" }}
       as={MenuItem}
       bg={isActive ? "#E5E5E5" : "transparent"}
       _hover={{ bg: "#00000029" }}
@@ -72,7 +72,7 @@ export const SelectValue = forwardRef(
         as={Button}
         color="#404040"
         textAlign="left"
-        w="56"
+        w={{ sm: "56" }}
         d="flex"
         align="center"
         justify="space-between"
