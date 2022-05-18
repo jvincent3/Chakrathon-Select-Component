@@ -9,7 +9,7 @@ import {
 } from "./components/select"
 
 function App() {
-  const [fruits, setFruits] = useState([
+  const fruits = [
     { label: "Apple", value: "apple" },
     { label: "Banana", value: "banana" },
     { label: "Orange", value: "orange" },
