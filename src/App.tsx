@@ -1,15 +1,12 @@
 import { useState } from "react"
 import "./App.css"
+import { Box, Center } from "@chakra-ui/react"
 import {
-  Box,
-  Button,
-  Center,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-} from "@chakra-ui/react"
-import { Select, SelectList, SelectItem } from "./components/select"
+  Select,
+  SelectList,
+  SelectItem,
+  SelectValue,
+} from "./components/select"
 
 function App() {
   const [fruits, setFruits] = useState([
@@ -22,25 +19,16 @@ function App() {
   return (
     <Center h="100vh">
       <Box>
-        <Box>{JSON.stringify(selectedFruit)}</Box>
         <Select
-          labelKey="label"
-          isSearchable={true}
-          isClearable={true}
+          getLabel={(item) => item.label}
           value={selectedFruit}
-          onChange={(value) => {
-            setSelectedFruit(value)
-          }}
-          onSearch={(value) => {
-            setFruits((prevFruits) =>
-              prevFruits.filter((fruit) => fruit.value !== value)
-            )
-          }}
-          onClear={() => setSelectedFruit(fruits[0])}
+          onChange={(value) => setSelectedFruit(value)}
         >
+          <SelectValue />
           <SelectList>
             {fruits.map((fruit) => (
               <SelectItem
+                key={fruit.value}
                 isActive={selectedFruit.value === fruit.value}
                 value={fruit}
               >
@@ -49,17 +37,6 @@ function App() {
             ))}
           </SelectList>
         </Select>
-
-        {/* <Menu>
-          <MenuButton as={Button} colorScheme="pink">
-            Test
-          </MenuButton>
-          <MenuList>
-            {fruits.map((fruit) => (
-              <MenuItem value={fruit}>{fruit.label}</MenuItem>
-            ))}
-          </MenuList>
-        </Menu> */}
       </Box>
     </Center>
   )
